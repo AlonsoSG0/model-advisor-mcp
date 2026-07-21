@@ -226,37 +226,3 @@ pnpm start
 # Modo watch (recarga automática)
 pnpm dev
 ```
-
-## Publicación en npm (mantenedores)
-
-Publica únicamente desde una copia limpia del repositorio y después de revisar el contenido real del paquete:
-
-```bash
-# Autenticación y verificación local
-npm whoami
-pnpm verify
-npm pack --dry-run
-
-# Crear e inspeccionar el tarball antes de publicar
-npm pack
-tar -tf model-advisor-mcp-*.tgz
-
-# Publicar (npm puede solicitar 2FA u otro método de autenticación)
-npm publish --access public
-```
-
-Después de publicar, verifica el registro y prueba el paquete en un entorno aislado:
-
-```bash
-npm view model-advisor-mcp name version dist-tags --json
-prefix="$(mktemp -d)"
-npm install --prefix "$prefix" --global model-advisor-mcp
-printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"npm-smoke-test","version":"1.0.0"}}}' \
-  | "$prefix/bin/model-advisor-mcp"
-```
-
-No continúes si el tarball contiene secretos, archivos locales o cualquier elemento fuera de `dist/`, la guía, los README, `LICENSE` y `package.json`.
-
-## Licencia
-
-MIT

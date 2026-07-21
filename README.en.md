@@ -227,36 +227,3 @@ pnpm start
 pnpm dev
 ```
 
-## Publishing to npm (maintainers)
-
-Publish only from a clean repository checkout and after inspecting the package's actual contents:
-
-```bash
-# Authentication and local verification
-npm whoami
-pnpm verify
-npm pack --dry-run
-
-# Create and inspect the tarball before publishing
-npm pack
-tar -tf model-advisor-mcp-*.tgz
-
-# Publish (npm may require 2FA or another authentication method)
-npm publish --access public
-```
-
-After publishing, verify the registry entry and test the package in an isolated environment:
-
-```bash
-npm view model-advisor-mcp name version dist-tags --json
-prefix="$(mktemp -d)"
-npm install --prefix "$prefix" --global model-advisor-mcp
-printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"npm-smoke-test","version":"1.0.0"}}}' \
-  | "$prefix/bin/model-advisor-mcp"
-```
-
-Stop if the tarball contains secrets, local files, or anything outside `dist/`, the guide, the READMEs, `LICENSE`, and `package.json`.
-
-## License
-
-MIT
