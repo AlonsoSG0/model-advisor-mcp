@@ -1,0 +1,48 @@
+{
+  "name": "model-advisor-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for matching OpenCode models to Gentle AI agent criteria.",
+  "type": "module",
+  "bin": {
+    "model-advisor-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist/",
+    "guia_gentle_ai.md",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "AtripArch",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "opencode",
+    "openrouter",
+    "ai-models"
+  ],
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "tsx watch server.ts",
+    "build": "tsc",
+    "postbuild": "node -e \"require('node:fs').chmodSync('dist/server.js', 0o755)\"",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "test:handshake": "npm run build && bash test/handshake.sh dist/server.js",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.0",
+    "dotenv": "^17.4.2",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
+  }
+}

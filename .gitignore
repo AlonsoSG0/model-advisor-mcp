@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Logs and diagnostics
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Package artifacts
+*.tgz
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+
+# Local agent tooling
+.atl/
+.codegraph/
