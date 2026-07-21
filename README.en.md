@@ -10,6 +10,8 @@
 
 MCP server that helps LLMs pick the best AI model for each coding agent. Fetches real-time data from your OpenCode subscriptions and cross-references with OpenRouter benchmarks and reasoning capabilities.
 
+> ⚠️ **Notice**: The package is not yet published on npm. Installation is only available by cloning the repository (see [Option B: Manual](#option-b-manual-development)). `npm install -g model-advisor-mcp` support is coming soon.
+
 ## What it does
 
 - Lists all available models in your **OpenCode Go and/or Zen** subscriptions
@@ -44,6 +46,16 @@ pnpm build
 - **OpenRouter API key** — get yours at [openrouter.ai/keys](https://openrouter.ai/keys) (optional; the public catalog works without one)
 
 ## Configuration
+
+Before configuring OpenCode, make sure your OpenCode API key is available as a shell environment variable. Add it to your `~/.zshrc`, `~/.bashrc`, or equivalent profile:
+
+```bash
+export OPENCODE_API_KEY="sk-your-api-key"
+```
+
+After adding it, restart your terminal or run `source ~/.zshrc` to make the variable available.
+
+> **Note**: `OPENROUTER_API_KEY` is optional. If you want to use it, add it the same way: `export OPENROUTER_API_KEY="sk-your-key"`.
 
 Add this to your `opencode.json` or `opencode.jsonc`:
 
