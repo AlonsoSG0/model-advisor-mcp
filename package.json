@@ -2,6 +2,14 @@
   "name": "model-advisor-mcp",
   "version": "1.0.0",
   "description": "MCP server for matching OpenCode models to Gentle AI agent criteria.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlonsoSG0/model-advisor-mcp.git"
+  },
+  "homepage": "https://github.com/AlonsoSG0/model-advisor-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/AlonsoSG0/model-advisor-mcp/issues"
+  },
   "type": "module",
   "bin": {
     "model-advisor-mcp": "dist/server.js"
@@ -15,6 +23,7 @@
   ],
   "license": "MIT",
   "author": "AtripArch",
+  "packageManager": "pnpm@11.3.0",
   "engines": {
     "node": ">=18"
   },
@@ -31,9 +40,15 @@
     "build": "tsc",
     "postbuild": "node -e \"require('node:fs').chmodSync('dist/server.js', 0o755)\"",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --test test/*.test.mjs",
-    "test:handshake": "npm run build && bash test/handshake.sh dist/server.js",
-    "prepack": "npm run build"
+    "test": "npm run build && npm run test:unit && npm run test:handshake",
+    "test:unit": "node --test test/*.test.mjs",
+    "test:handshake": "bash test/handshake.sh dist/server.js",
+    "verify": "npm run typecheck && npm run test",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run verify"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.0",

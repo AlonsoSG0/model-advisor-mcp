@@ -26,7 +26,7 @@ Servidor MCP que ayuda a los LLMs a elegir el mejor modelo de IA para cada agent
 npm install -g model-advisor-mcp
 ```
 
-Luego configuralo en OpenCode (ver [Configuración](#configuración)).
+Luego, configúralo en OpenCode (consulta [Configuración](#configuración)).
 
 ### Opción B: Manual (desarrollo)
 
@@ -40,12 +40,12 @@ pnpm build
 ## Requisitos
 
 - **Node.js 18+**
-- **API key de OpenCode** — obtenela en [opencode.ai](https://opencode.ai) (requerido)
-- **API key de OpenRouter** — obtenela en [openrouter.ai/keys](https://openrouter.ai/keys) (opcional; el catálogo público funciona sin ella)
+- **API key de OpenCode** — obténla en [opencode.ai](https://opencode.ai) (requerida)
+- **API key de OpenRouter** — obténla en [openrouter.ai/keys](https://openrouter.ai/keys) (opcional; el catálogo público funciona sin ella)
 
 ## Configuración
 
-Agregá esto a tu `opencode.json` o `opencode.jsonc`:
+Agrega lo siguiente a tu `opencode.json` o `opencode.jsonc`:
 
 ```jsonc
 {
@@ -86,13 +86,13 @@ Si instalaste vía npm (`npm install -g model-advisor-mcp`):
 }
 ```
 
-> **Nota**: `OPENROUTER_API_KEY` es opcional. El servidor consulta el catálogo público sin credenciales; si definís la clave, la envía como autenticación en las solicitudes de enriquecimiento.
+> **Nota**: `OPENROUTER_API_KEY` es opcional. El servidor consulta el catálogo público sin credenciales; si defines la clave, la envía como autenticación en las solicitudes de enriquecimiento.
 
 ## Inicio rápido y ejemplos
 
 Después de instalar y configurar el MCP:
 
-1. Verificá en la terminal que el ejecutable instalado globalmente está disponible:
+1. Verifica en la terminal que el ejecutable instalado globalmente esté disponible:
 
    ```bash
    command -v model-advisor-mcp
@@ -100,14 +100,14 @@ Después de instalar y configurar el MCP:
 
    El comando debe devolver la ruta del ejecutable. Si hiciste una instalación manual, este paso no aplica: OpenCode usa la ruta a `dist/server.js` configurada arriba.
 
-2. Reiniciá OpenCode para que cargue la configuración y verificá el estado de la conexión:
+2. Reinicia OpenCode para que cargue la configuración y verifica el estado de la conexión:
 
    ```bash
    opencode mcp list
    ```
 
    `model-advisor` debe aparecer conectado.
-3. Enviá uno de estos prompts a tu agente u orquestador de IA. **No son comandos de terminal**:
+3. Envía uno de estos prompts a tu agente u orquestador de IA. **No son comandos de terminal**:
 
    > Usando el MCP model-advisor, dime qué modelos hay disponibles en las suscripciones OpenCode Go y Zen.
 
@@ -164,7 +164,7 @@ Obtiene todos los modelos de IA de tus suscripciones OpenCode (Go y/o Zen), enri
 
 ### `get_agent_criteria`
 
-Lee los criterios de selección de agentes de la guía Gentle AI. Usá esta herramienta **antes** de elegir modelo — cada agente tiene necesidades específicas (contexto, razonamiento, velocidad, costo).
+Lee los criterios de selección de agentes de la guía Gentle AI. Usa esta herramienta **antes** de elegir modelo: cada agente tiene necesidades específicas (contexto, razonamiento, velocidad y costo).
 
 **Parámetros:**
 
@@ -214,6 +214,36 @@ pnpm start
 # Modo watch (recarga automática)
 pnpm dev
 ```
+
+## Publicación en npm (mantenedores)
+
+Publica únicamente desde una copia limpia del repositorio y después de revisar el contenido real del paquete:
+
+```bash
+# Autenticación y verificación local
+npm whoami
+pnpm verify
+npm pack --dry-run
+
+# Crear e inspeccionar el tarball antes de publicar
+npm pack
+tar -tf model-advisor-mcp-*.tgz
+
+# Publicar (npm puede solicitar 2FA u otro método de autenticación)
+npm publish --access public
+```
+
+Después de publicar, verifica el registro y prueba el paquete en un entorno aislado:
+
+```bash
+npm view model-advisor-mcp name version dist-tags --json
+prefix="$(mktemp -d)"
+npm install --prefix "$prefix" --global model-advisor-mcp
+printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"npm-smoke-test","version":"1.0.0"}}}' \
+  | "$prefix/bin/model-advisor-mcp"
+```
+
+No continúes si el tarball contiene secretos, archivos locales o cualquier elemento fuera de `dist/`, la guía, los README, `LICENSE` y `package.json`.
 
 ## Licencia
 
