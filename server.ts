@@ -11,7 +11,6 @@
 // fits which agent based on the criteria in guia_gentle_ai.md.
 // ---------------------------------------------------------------------------
 
-import dotenv from "dotenv";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -38,14 +37,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = findProjectRoot(__dirname);
 const GUIDE_PATH = resolve(PROJECT_ROOT, "guia_gentle_ai.md");
 
-// Load an optional local .env during development.
-dotenv.config({ path: resolve(PROJECT_ROOT, ".env"), quiet: true });
-
 // ---- Server -----------------------------------------------------------------
 
 const server = new McpServer({
   name: "model-advisor",
-  version: "1.0.0",
+  version: "1.5.0",
   description:
     "Agent-Model Recommendation Advisor. Fetches available models from OpenCode subscriptions and OpenRouter benchmarks, reads agent selection criteria from the Gentle AI guide, and helps recommend the best model for each agent/sub-agent.",
 });

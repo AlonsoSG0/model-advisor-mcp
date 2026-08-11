@@ -1,6 +1,6 @@
 {
   "name": "model-advisor-mcp",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "MCP server for matching OpenCode models to Gentle AI agent criteria.",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "dist/",
     "guia_gentle_ai.md",
     "README.md",
-    "README.en.md",
+    "README.es.md",
     "LICENSE"
   ],
   "license": "MIT",
@@ -52,7 +52,6 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.0",
-    "dotenv": "^17.4.2",
     "zod": "^3.25.0"
   },
   "devDependencies": {

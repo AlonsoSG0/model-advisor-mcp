@@ -1,36 +1,36 @@
 # model-advisor-mcp
 
 <p align="center">
-  <a href="README.en.md">English version</a>
+  <a href="README.es.md">Versión en español</a>
   ·
-  <a href="guia_gentle_ai.md">Criterios de selección (guía)</a>
+  <a href="guia_gentle_ai.md">Selection criteria (guide)</a>
 </p>
 
-> **📢 Aporte comunitario** — Las recomendaciones de este MCP están diseñadas para los agentes del harness [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai). Este es un proyecto independiente creado para ayudar a la comunidad a elegir los mejores modelos para cada agente. No está afiliado oficialmente con Gentle AI ni con OpenCode.
+> **📢 Community contribution** — This MCP's recommendations are designed for agents in the [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai) harness. This is an independent project created to help the community choose the best models for each agent. It is not officially affiliated with Gentle AI or OpenCode.
 
-Servidor MCP que ayuda a los LLMs a elegir el mejor modelo de IA para cada agente de coding. Obtiene datos en tiempo real de tus suscripciones OpenCode y los cruza con benchmarks y capacidades de razonamiento de OpenRouter.
+MCP server that helps LLMs pick the best AI model for each coding agent. Fetches real-time data from the public OpenCode Go/Zen model catalogs and cross-references with OpenRouter benchmarks and reasoning capabilities.
 
-> ⚠️ **Aviso**: El paquete aún no está publicado en npm. La instalación solo está disponible clonando el repositorio (ver [Opción B: Manual](#opción-b-manual-desarrollo)). El soporte para `npm install -g model-advisor-mcp` llegará próximamente.
+> ⚠️ **Notice**: The package is not yet published on npm. Installation is only available by cloning the repository (see [Option B: Manual](#option-b-manual-development)). `npm install -g model-advisor-mcp` support is coming soon.
 
-## Qué hace
+## What it does
 
-- Lista todos los modelos disponibles en tu suscripción **OpenCode Go y/o Zen**
-- Los enriquece con **benchmarks de OpenRouter** (inteligencia, coding, agentic), precios y ventana de contexto
-- Muestra el **soporte de razonamiento** — si el modelo tiene niveles explícitos (`xhigh`, `high`, `low`) o solo un toggle on/off
-- Lee los **criterios de selección** de la guía Gentle AI para que el LLM sepa qué necesita cada agente antes de elegir modelo
-- Recomienda modelos por agente basándose en datos reales, no en suposiciones
+- Lists all available models in the **OpenCode Go and/or Zen** subscriptions
+- Enriches them with **OpenRouter benchmarks** (intelligence, coding, agentic scores), pricing, and context window
+- Shows **reasoning effort support** — whether a model supports explicit effort levels (`xhigh`, `high`, `low`) or a simple toggle
+- Reads **agent selection criteria** from the Gentle AI guide so the LLM knows what each agent needs before choosing a model
+- Recommends models per agent based on actual data, not guesses
 
-## Instalación
+## Installation
 
-### Opción A: npm (recomendado)
+### Option A: npm (recommended)
 
 ```bash
 npm install -g model-advisor-mcp
 ```
 
-Luego, configúralo en OpenCode (consulta [Configuración](#configuración)).
+Then configure OpenCode to use it (see [Configuration](#configuration)).
 
-### Opción B: Manual (desarrollo)
+### Option B: Manual (development)
 
 ```bash
 git clone https://github.com/AlonsoSG0/model-advisor-mcp.git
@@ -39,25 +39,17 @@ pnpm install
 pnpm build
 ```
 
-## Requisitos
+## Requirements
 
 - **Node.js 18+**
-- **API key de OpenCode** — obténla en [opencode.ai](https://opencode.ai) (requerida)
-- **API key de OpenRouter** — obténla en [openrouter.ai/keys](https://openrouter.ai/keys) (opcional; el catálogo público funciona sin ella)
 
-## Configuración
+**No API keys required.** The OpenCode (Zen/Go) and OpenRouter model catalogs are public endpoints; the server makes unauthenticated requests and works out of the box.
 
-Antes de configurar OpenCode, asegurate de que tu API key de OpenCode esté disponible como variable de entorno en tu shell. Agregala a tu `~/.zshrc`, `~/.bashrc` o perfil equivalente:
+## Configuration
 
-```bash
-export OPENCODE_API_KEY="sk-tu-api-key"
-```
+No environment variables or API keys are needed. The server fetches the public model catalogs of OpenCode (Zen and Go) and OpenRouter without credentials.
 
-Luego de agregarla, reiniciá tu terminal o ejecutá `source ~/.zshrc` para que la variable esté disponible.
-
-> **Nota**: `OPENROUTER_API_KEY` es opcional. Si querés usarla, agregala de la misma forma: `export OPENROUTER_API_KEY="sk-tu-key"`.
-
-Agrega lo siguiente a tu `opencode.json` o `opencode.jsonc`:
+Add this to your `opencode.json` or `opencode.jsonc`:
 
 ```jsonc
 {
@@ -66,21 +58,17 @@ Agrega lo siguiente a tu `opencode.json` o `opencode.jsonc`:
       "type": "local",
       "command": [
         "node",
-        "/ruta/a/model-advisor-mcp/dist/server.js"
+        "/path/to/model-advisor-mcp/dist/server.js"
       ],
-      "cwd": "/ruta/a/model-advisor-mcp",
+      "cwd": "/path/to/model-advisor-mcp",
       "enabled": true,
-      "timeout": 30000,
-      "environment": {
-        "OPENCODE_API_KEY": "{env:OPENCODE_API_KEY}",
-        "OPENROUTER_API_KEY": "{env:OPENROUTER_API_KEY}"
-      }
+      "timeout": 30000
     }
   }
 }
 ```
 
-Si instalaste vía npm (`npm install -g model-advisor-mcp`):
+If you installed via npm (`npm install -g model-advisor-mcp`):
 
 ```jsonc
 {
@@ -89,72 +77,67 @@ Si instalaste vía npm (`npm install -g model-advisor-mcp`):
       "type": "local",
       "command": ["model-advisor-mcp"],
       "enabled": true,
-      "timeout": 30000,
-      "environment": {
-        "OPENCODE_API_KEY": "{env:OPENCODE_API_KEY}"
-      }
+      "timeout": 30000
     }
   }
 }
 ```
 
-> **Nota**: `OPENROUTER_API_KEY` es opcional. El servidor consulta el catálogo público sin credenciales; si defines la clave, la envía como autenticación en las solicitudes de enriquecimiento.
+## Quick start and examples
 
-## Inicio rápido y ejemplos
+After installing and configuring the MCP:
 
-Después de instalar y configurar el MCP:
-
-1. Verifica en la terminal que el ejecutable instalado globalmente esté disponible:
+1. Verify in your terminal that the globally installed executable is available:
 
    ```bash
    command -v model-advisor-mcp
    ```
 
-   El comando debe devolver la ruta del ejecutable. Si hiciste una instalación manual, este paso no aplica: OpenCode usa la ruta a `dist/server.js` configurada arriba.
+   The command should return the executable path. If you installed manually, this step does not apply: OpenCode uses the path to `dist/server.js` configured above.
 
-2. Reinicia OpenCode para que cargue la configuración y verifica el estado de la conexión:
+2. Restart OpenCode so it loads the configuration, then verify the connection status:
 
    ```bash
    opencode mcp list
    ```
 
-   `model-advisor` debe aparecer conectado.
-3. Envía uno de estos prompts a tu agente u orquestador de IA. **No son comandos de terminal**:
+   `model-advisor` should appear connected.
+3. Send one of these prompts to your AI agent or orchestrator. **They are not terminal commands**:
 
-   > Usando el MCP model-advisor, dime qué modelos hay disponibles en las suscripciones OpenCode Go y Zen.
+   > Using the model-advisor MCP, tell me which models are available in the OpenCode Go and Zen subscriptions.
 
-   > Usando el MCP model-advisor, dame una recomendación low cost usando solamente modelos de OpenCode Go.
+   > Using the model-advisor MCP, give me a low-cost recommendation using only OpenCode Go models.
 
-Si el agente puede listar modelos o generar una recomendación usando datos del MCP, la conexión funciona correctamente.
+If the agent can list models or produce a recommendation using MCP data, the connection is working correctly.
 
-## Herramientas
+## Tools
 
 ### `list_available_models`
 
-Obtiene todos los modelos de IA de tus suscripciones OpenCode (Go y/o Zen), enriquecidos con OpenRouter.
+Fetches all AI models from the OpenCode Go and/or Zen catalogs, cross-referenced with OpenRouter.
 
-**Parámetros:**
+**Parameters:**
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `subscription` | `"go"` \| `"zen"` \| `"both"` | `"both"` | Qué suscripción consultar |
-| `enrich` | `boolean` | `true` | Poner `false` para omitir OpenRouter (más rápido) |
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `subscription` | `"go"` \| `"zen"` \| `"both"` | `"both"` | Which subscription to query |
+| `enrich` | `boolean` | `true` | Set `false` to skip OpenRouter enrichment (faster) |
 
-**Devuelve por cada modelo:**
+**Returns for each model:**
 
-| Campo | Descripción |
+| Field | Description |
 |-------|-------------|
-| `ocId` / `ocName` / `ocProvider` | Identidad del modelo |
-| `pricing` | Costo input/output por 1M tokens (USD) |
-| `contextLength` | Ventana de contexto máxima en tokens |
-| `benchmarks` | Puntajes de inteligencia, coding y agentic (Artificial Analysis) |
-| `reasoning` | Niveles de esfuerzo disponibles (`supportedEfforts`) y defaults |
-| `subscription` | A qué suscripción(es) pertenece el modelo |
+| `ocId` / `ocName` / `ocProvider` | Model identity |
+| `pricing` | Input/output cost per 1M tokens (USD) |
+| `contextLength` | Max context window in tokens |
+| `benchmarks` | Intelligence, coding, and agentic scores (Artificial Analysis) |
+| `reasoning` | Effort levels available (`supportedEfforts`) and defaults |
+| `subscription` | Which subscription(s) the model belongs to |
 
-**Ejemplo de reasoning:**
+**Example reasoning output:**
 
 ```json
-// Modelo con niveles de esfuerzo explícitos
+// Model with explicit effort levels
 "reasoning": {
   "supportedEfforts": ["xhigh", "high"],
   "defaultEffort": "high",
@@ -162,7 +145,7 @@ Obtiene todos los modelos de IA de tus suscripciones OpenCode (Go y/o Zen), enri
   "defaultEnabled": true
 }
 
-// Modelo con toggle on/off
+// Model with toggle only (on/off)
 "reasoning": {
   "supportedEfforts": [],
   "defaultEffort": null,
@@ -170,59 +153,59 @@ Obtiene todos los modelos de IA de tus suscripciones OpenCode (Go y/o Zen), enri
   "defaultEnabled": true
 }
 
-// Modelo sin razonamiento
+// Model without reasoning
 "reasoning": null
 ```
 
 ### `get_agent_criteria`
 
-Lee los criterios de selección de agentes de la guía Gentle AI. Usa esta herramienta **antes** de elegir modelo: cada agente tiene necesidades específicas (contexto, razonamiento, velocidad y costo).
+Reads agent selection criteria from the Gentle AI guide. Use this **before** picking a model — each agent has specific needs (context window, reasoning ability, speed, cost).
 
-**Parámetros:**
+**Parameters:**
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `agent` | `string` | (guía completa) | ID del agente a filtrar. Omitir para obtener todos. |
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `agent` | `string` | (full guide) | Agent ID to filter by. Omit to get all agents. |
 
-**IDs de agentes:** `gentle-orchestrator`, `sdd-init`, `sdd-onboard`, `sdd-explore`, `sdd-propose`, `sdd-spec`, `sdd-design`, `sdd-tasks`, `sdd-apply`, `sdd-verify`, `sdd-archive`, `review-risk`, `review-readability`, `review-reliability`, `review-resilience`, `review-refuter`, `jd-judge-a`, `jd-judge-b`, `jd-fix-agent`
+**Agent IDs:** `gentle-orchestrator`, `sdd-init`, `sdd-onboard`, `sdd-explore`, `sdd-propose`, `sdd-spec`, `sdd-design`, `sdd-tasks`, `sdd-apply`, `sdd-verify`, `sdd-archive`, `review-risk`, `review-readability`, `review-reliability`, `review-resilience`, `review-refuter`, `jd-judge-a`, `jd-judge-b`, `jd-fix-agent`
 
-**Grupos de agentes** (mostrar recomendaciones en este orden):
+**Agent Groups** (display recommendations in this order):
 1. Orchestrator
-2. Agentes SDD
+2. SDD agents
 3. Review (4R)
 4. Judgment Day
 
 ### `get_model_benchmarks`
 
-Búsqueda detallada de un modelo específico en OpenRouter. Útil cuando `list_available_models` no trajo benchmarks para un modelo.
+Deep-dive into a specific model's OpenRouter data. Useful when `list_available_models` didn't return benchmarks for a model.
 
-**Parámetros:**
+**Parameters:**
 
-| Parámetro | Tipo | Descripción |
-|-----------|------|-------------|
-| `query` | `string` (requerido) | ID o nombre del modelo (ej. `"deepseek-v4-pro"`, `"kimi"`) |
+| Param | Type | Description |
+|-------|------|-------------|
+| `query` | `string` (required) | Model ID or name (e.g. `"deepseek-v4-pro"`, `"kimi"`) |
 
-## Cómo usa el LLM estas herramientas
+## How the LLM uses these tools
 
-El flujo típico:
+The typical workflow:
 
-1. **`list_available_models`** → ve qué hay disponible, sus benchmarks y soporte de razonamiento
-2. **`get_agent_criteria`** (por agente) → entiende qué necesita cada agente
-3. **`get_model_benchmarks`** (opcional) → datos más profundos de un modelo específico
-4. **El LLM razona** → empareja modelos con agentes según criterios + benchmarks + costo
+1. **`list_available_models`** → sees what's available, their benchmarks, and reasoning support
+2. **`get_agent_criteria`** (per agent) → understands what each agent needs
+3. **`get_model_benchmarks`** (optional) → deeper data on a specific model
+4. **LLM reasons** → matches models to agents based on criteria + benchmarks + cost
 
-## Desarrollo
+## Development
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 pnpm install
 
-# Compilar TypeScript
+# Compile TypeScript
 pnpm build
 
-# Ejecutar directo (para pruebas)
+# Run directly (for testing)
 pnpm start
 
-# Modo watch (recarga automática)
+# Watch mode (auto-reload on changes)
 pnpm dev
 ```

@@ -1,7 +1,8 @@
 // ---------------------------------------------------------------------------
 // MCP Data Layer — OpenCode + OpenRouter API clients
 //
-// Node-native fetch (no Astro/Vite deps). Uses process.env for API keys.
+// Node-native fetch (no Astro/Vite deps). All catalog endpoints are public
+// and require no credentials.
 // ---------------------------------------------------------------------------
 
 // ---- Types ----------------------------------------------------------------
@@ -74,26 +75,13 @@ export interface EnrichedModel {
   } | null;
 }
 
-// ---- API key helper -------------------------------------------------------
-
-function getOcApiKey(): string {
-  const key = process.env.OPENCODE_API_KEY;
-  if (!key) {
-    throw new Error("OPENCODE_API_KEY not set in environment");
-  }
-  return key;
-}
-
 // ---- OpenCode API ---------------------------------------------------------
 
 const OC_GO_URL = "https://opencode.ai/zen/go/v1/models";
 const OC_ZEN_URL = "https://opencode.ai/zen/v1/models";
 
 async function fetchOcModels(url: string, label: string): Promise<OCModel[]> {
-  const apiKey = getOcApiKey();
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  });
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`OpenCode ${label} API returned ${res.status}: ${res.statusText}`);
   }
@@ -176,12 +164,8 @@ export async function listModels(
 
 const OR_URL = "https://openrouter.ai/api/v1/models";
 
-export function buildOpenRouterHeaders(apiKey = process.env.OPENROUTER_API_KEY): HeadersInit {
-  return apiKey ? { Authorization: `Bearer ${apiKey}` } : {};
-}
-
 async function fetchOpenRouterModels(): Promise<ORModel[]> {
-  const res = await fetch(OR_URL, { headers: buildOpenRouterHeaders() });
+  const res = await fetch(OR_URL);
   if (!res.ok) {
     throw new Error(`OpenRouter API returned ${res.status}`);
   }
