@@ -10,8 +10,6 @@
 
 MCP server that helps LLMs pick the best AI model for each coding agent. Fetches real-time data from the public OpenCode Go/Zen model catalogs and cross-references with OpenRouter benchmarks and reasoning capabilities.
 
-> ⚠️ **Notice**: The package is not yet published on npm. Installation is only available by cloning the repository (see [Option B: Manual](#option-b-manual-development)). `npm install -g model-advisor-mcp` support is coming soon.
-
 ## What it does
 
 - Lists all available models in the **OpenCode Go and/or Zen** subscriptions
@@ -30,7 +28,7 @@ npm install -g model-advisor-mcp
 
 Then configure OpenCode to use it (see [Configuration](#configuration)).
 
-### Option B: Manual (development)
+### Option B: Manual (development only)
 
 ```bash
 git clone https://github.com/AlonsoSG0/model-advisor-mcp.git
@@ -49,7 +47,22 @@ pnpm build
 
 No environment variables or API keys are needed. The server fetches the public model catalogs of OpenCode (Zen and Go) and OpenRouter without credentials.
 
-Add this to your `opencode.json` or `opencode.jsonc`:
+If you installed via npm (recommended):
+
+```jsonc
+{
+  "mcp": {
+    "model-advisor": {
+      "type": "local",
+      "command": ["model-advisor-mcp"],
+      "enabled": true,
+      "timeout": 30000
+    }
+  }
+}
+```
+
+If you are developing locally from a clone, point OpenCode to your local build:
 
 ```jsonc
 {
@@ -61,21 +74,6 @@ Add this to your `opencode.json` or `opencode.jsonc`:
         "/path/to/model-advisor-mcp/dist/server.js"
       ],
       "cwd": "/path/to/model-advisor-mcp",
-      "enabled": true,
-      "timeout": 30000
-    }
-  }
-}
-```
-
-If you installed via npm (`npm install -g model-advisor-mcp`):
-
-```jsonc
-{
-  "mcp": {
-    "model-advisor": {
-      "type": "local",
-      "command": ["model-advisor-mcp"],
       "enabled": true,
       "timeout": 30000
     }

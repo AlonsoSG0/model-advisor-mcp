@@ -41,7 +41,7 @@ const GUIDE_PATH = resolve(PROJECT_ROOT, "guia_gentle_ai.md");
 
 const server = new McpServer({
   name: "model-advisor",
-  version: "1.5.0",
+  version: "1.5.1",
   description:
     "Agent-Model Recommendation Advisor. Fetches available models from OpenCode subscriptions and OpenRouter benchmarks, reads agent selection criteria from the Gentle AI guide, and helps recommend the best model for each agent/sub-agent.",
 });
